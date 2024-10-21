@@ -9,7 +9,7 @@ import dict
 def eval(spec, freq, t, pitch_name_list, THRESFOLD=5):
     # STFT に対する評価
     # spec: 各周波数に対するスペクトル（強さ）
-    # freq: 周波数ビン（sr = 22050, NFFT = 65534 で 0.336Hz 刻み  sr / NFFT で計算できる）
+    # freq: 周波数ビン（sr = 22050, NFFT = 65536 で 0.336Hz 刻み  sr / NFFT で計算できる）
     # pitch_name_list: 演奏される音の音名と根音の情報 (pitch, is_root) のタプル
 
     # -前処理
@@ -58,7 +58,7 @@ def eval(spec, freq, t, pitch_name_list, THRESFOLD=5):
 
 def analyze(file_path, pitch_list, show=False):
     print("file loading...")
-    y, sr = librosa.load(file_path, sr=96000)
+    y, sr = librosa.load(file_path, sr=22050)
     print("ok")
     print(f"sampling rate: {sr}")
     print("analyzing...")
