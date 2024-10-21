@@ -5,6 +5,8 @@ import librosa
 import numpy as np
 import math
 
+import input_pitchname
+
 
 def create_canvas_gauge(parent):
     # Canvasウィジェットを使ってメーターを作成
@@ -34,6 +36,12 @@ def start_audio_stream(update_gauge):
     # サンプリングレートとバッファサイズを設定
     sample_rate = 22050  # librosaのデフォルトサンプリングレート
     buffer_size = 1024
+
+    # ストリームを格納する変数をグローバルに宣言
+    global stream
+    stream = None
+
+    print(f"Audio stream started")
 
     # 音声コールバック関数
     def audio_callback(indata, frames, time, status):
@@ -76,6 +84,14 @@ def start_audio_stream(update_gauge):
     stream.start()
 
 
+def stop_audio_stream():
+    global stream
+    if stream is not None:
+        stream.stop()
+        stream.close()
+        print("Audio stream stopped.")
+
+
 def build(parent, pitch_list):
     # 音声入力タブに関連するUIを作成
     frame_inputsound = ttk.Frame(parent)
@@ -84,6 +100,19 @@ def build(parent, pitch_list):
     # メーターの作成
     update_gauge = create_canvas_gauge(frame_inputsound)
 
+    # 演奏音入力部分
+    frame_inputchord = ttk.Frame(parent)
+    frame_inputchord.pack(side=tk.TOP)
+
+    inputchord_title = tk.Label(frame_inputchord, text="演奏音入力")
+    inputchord_title.pack(side=tk.LEFT, fill=tk.X)
+
+    # 音名入力部分
+    frame_inputpitchname = ttk.Frame(frame_inputchord)
+    frame_inputpitchname.pack(side=tk.LEFT, fill=tk.X)
+
+    input_pitchname.build(frame_inputpitchname, pitch_list)
+
     # ボタンを作成してリアルタイム音声解析を開始
     start_button = ttk.Button(
         frame_inputsound,
@@ -91,3 +120,9 @@ def build(parent, pitch_list):
         command=lambda: start_audio_stream(update_gauge),
     )
     start_button.pack(pady=10)
+
+    # 停止ボタンを作成してリアルタイム音声解析を停止
+    stop_button = ttk.Button(
+        frame_inputsound, text="解析停止", command=stop_audio_stream
+    )
+    stop_button.pack(pady=10)
