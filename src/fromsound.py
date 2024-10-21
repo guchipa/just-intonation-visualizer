@@ -8,9 +8,14 @@ import math
 import input_pitchname
 
 
-def create_canvas_gauge(parent):
-    # Canvasウィジェットを使ってメーターを作成
-    canvas = tk.Canvas(parent, width=300, height=200, bg="white")
+def create_meter_window():
+    # 新しいウィンドウ（Toplevel）を作成
+    meter_window = tk.Toplevel()
+    meter_window.title("メーターウィンドウ")
+    meter_window.geometry("400x300")
+
+    # メーターを作成
+    canvas = tk.Canvas(meter_window, width=300, height=200, bg="white")
     canvas.pack(pady=20)
 
     # 円弧を描画
@@ -34,27 +39,21 @@ def create_canvas_gauge(parent):
 
 def start_audio_stream(update_gauge):
     # サンプリングレートとバッファサイズを設定
-    sample_rate = 22050  # librosaのデフォルトサンプリングレート
+    sample_rate = 22050
     buffer_size = 1024
 
-    # ストリームを格納する変数をグローバルに宣言
     global stream
     stream = None
 
     print(f"Audio stream started")
 
-    # 音声コールバック関数
     def audio_callback(indata, frames, time, status):
         if status:
             print(f"Error: {status}", flush=True)
         samples = np.squeeze(indata)
 
-        # librosaを使ってピッチ解析
         try:
-            # 音声データのゼロ交差数を用いて基本周波数を推定
             pitches, magnitudes = librosa.core.piptrack(y=samples, sr=sample_rate)
-
-            # 最大の振幅を持つ周波数を取得（簡易的な方法）
             pitch = 0
             if magnitudes.any():
                 index = magnitudes.argmax()
@@ -63,10 +62,9 @@ def start_audio_stream(update_gauge):
                 ]
 
             if pitch > 0:
-                # ピッチを基準に、針の位置を -1 から 1 の範囲にマッピング
-                reference_pitch = 440.0  # A4の基準ピッチ
+                reference_pitch = 440.0
                 deviation = (pitch - reference_pitch) / reference_pitch
-                deviation = max(-1, min(1, deviation))  # -1 から 1 にクランプ
+                deviation = max(-1, min(1, deviation))
 
                 # メーターを更新
                 update_gauge(deviation)
@@ -74,7 +72,6 @@ def start_audio_stream(update_gauge):
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
 
-    # サウンドデバイスのストリームを開く
     stream = sd.InputStream(
         callback=audio_callback,
         channels=1,
@@ -93,25 +90,25 @@ def stop_audio_stream():
 
 
 def build(parent, pitch_list):
-    # 音声入力タブに関連するUIを作成
     frame_inputsound = ttk.Frame(parent)
     frame_inputsound.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-    # メーターの作成
-    update_gauge = create_canvas_gauge(frame_inputsound)
-
-    # 演奏音入力部分
     frame_inputchord = ttk.Frame(parent)
     frame_inputchord.pack(side=tk.TOP)
 
     inputchord_title = tk.Label(frame_inputchord, text="演奏音入力")
     inputchord_title.pack(side=tk.LEFT, fill=tk.X)
 
-    # 音名入力部分
     frame_inputpitchname = ttk.Frame(frame_inputchord)
     frame_inputpitchname.pack(side=tk.LEFT, fill=tk.X)
 
     input_pitchname.build(frame_inputpitchname, pitch_list)
+
+    # メーターウィンドウを作成するボタン
+    meter_button = ttk.Button(
+        frame_inputsound, text="メーターを表示", command=lambda: start_meter()
+    )
+    meter_button.pack(pady=10)
 
     # ボタンを作成してリアルタイム音声解析を開始
     start_button = ttk.Button(
@@ -121,8 +118,12 @@ def build(parent, pitch_list):
     )
     start_button.pack(pady=10)
 
-    # 停止ボタンを作成してリアルタイム音声解析を停止
     stop_button = ttk.Button(
         frame_inputsound, text="解析停止", command=stop_audio_stream
     )
     stop_button.pack(pady=10)
+
+
+def start_meter():
+    global update_gauge
+    update_gauge = create_meter_window()
