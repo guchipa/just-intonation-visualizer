@@ -6,6 +6,9 @@ import numpy as np
 import math
 
 import input_pitchname
+import just_analyze
+
+global _pitch_list
 
 
 def create_meter_window():
@@ -53,20 +56,10 @@ def start_audio_stream(update_gauge):
         samples = np.squeeze(indata)
 
         try:
-            pitches, magnitudes = librosa.core.piptrack(y=samples, sr=sample_rate)
-            pitch = 0
-            if magnitudes.any():
-                index = magnitudes.argmax()
-                pitch = pitches[
-                    index // magnitudes.shape[1], index % magnitudes.shape[1]
-                ]
+            evallist = just_analyze.analyze(samples, sample_rate, _pitch_list)
 
-            if pitch > 0:
-                reference_pitch = 440.0
-                deviation = (pitch - reference_pitch) / reference_pitch
-                deviation = max(-1, min(1, deviation))
-
-                # メーターを更新
+            # メーターを更新
+            for deviation in evallist:
                 update_gauge(deviation)
 
         except Exception as e:
@@ -90,6 +83,9 @@ def stop_audio_stream():
 
 
 def build(parent, pitch_list):
+    global _pitch_list
+    _pitch_list = pitch_list
+
     frame_inputsound = ttk.Frame(parent)
     frame_inputsound.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
