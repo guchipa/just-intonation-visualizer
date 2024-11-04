@@ -52,13 +52,6 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
         # (-1, 1) に丸めてリストに追加
         eval_list.append((np.argmax(around_spec) - center) / EVAL_RANGE)
 
-        # if np.argmax(around_spec) == EVAL_RANGE:
-        #     print(f"{pitch_name_list[count]}: ok")
-        # if np.argmax(around_spec) > EVAL_RANGE:
-        #     print(f"{pitch_name_list[count]}: high")
-        # if np.argmax(around_spec) < EVAL_RANGE:
-        #     print(f"{pitch_name_list[count]}: low")
-
         count += 1
 
     return eval_list
