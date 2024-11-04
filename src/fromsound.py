@@ -8,13 +8,17 @@ import math
 import input_pitchname
 import just_analyze
 
+# グローバル変数の定義
+gauge_windows = []
+update_gauges = []
 global _pitch_list
 
 
-def create_meter_window():
+# メーターウィンドウを作成する
+def create_meter_window(pitch_name):
     # 新しいウィンドウ（Toplevel）を作成
     meter_window = tk.Toplevel()
-    meter_window.title("メーターウィンドウ")
+    meter_window.title(f"メーターウィンドウ - {pitch_name}")
     meter_window.geometry("400x300")
 
     # メーターを作成
@@ -40,10 +44,11 @@ def create_meter_window():
     return update_needle
 
 
-def start_audio_stream(update_gauge):
+# 音声入力ストリームの起動
+def start_audio_stream():
     # サンプリングレートとバッファサイズを設定
     sample_rate = 22050
-    buffer_size = 1024
+    buffer_size = 65536
 
     global stream
     stream = None
@@ -58,9 +63,10 @@ def start_audio_stream(update_gauge):
         try:
             evallist = just_analyze.analyze(samples, sample_rate, _pitch_list)
 
-            # メーターを更新
-            for deviation in evallist:
-                update_gauge(deviation)
+            # 各メーターを更新
+            for i, deviation in enumerate(evallist):
+                if i < len(update_gauges):
+                    update_gauges[i](deviation)
 
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
@@ -74,6 +80,7 @@ def start_audio_stream(update_gauge):
     stream.start()
 
 
+# 音声入力ストリームの停止
 def stop_audio_stream():
     global stream
     if stream is not None:
@@ -82,6 +89,7 @@ def stop_audio_stream():
         print("Audio stream stopped.")
 
 
+# リアルタイム入力タブのビルド
 def build(parent, pitch_list):
     global _pitch_list
     _pitch_list = pitch_list
@@ -102,7 +110,7 @@ def build(parent, pitch_list):
 
     # メーターウィンドウを作成するボタン
     meter_button = ttk.Button(
-        frame_inputsound, text="メーターを表示", command=lambda: start_meter()
+        frame_inputsound, text="メーターを表示", command=lambda: start_meter(pitch_list)
     )
     meter_button.pack(pady=10)
 
@@ -110,7 +118,7 @@ def build(parent, pitch_list):
     start_button = ttk.Button(
         frame_inputsound,
         text="リアルタイム解析開始",
-        command=lambda: start_audio_stream(update_gauge),
+        command=start_audio_stream,
     )
     start_button.pack(pady=10)
 
@@ -120,6 +128,12 @@ def build(parent, pitch_list):
     stop_button.pack(pady=10)
 
 
-def start_meter():
-    global update_gauge
-    update_gauge = create_meter_window()
+def start_meter(pitch_list):
+    global gauge_windows, update_gauges
+    gauge_windows.clear()
+    update_gauges.clear()
+
+    # ピッチリストの数だけメーターウィンドウを作成
+    for pitch_name in pitch_list:
+        update_gauge = create_meter_window(pitch_name)
+        update_gauges.append(update_gauge)
