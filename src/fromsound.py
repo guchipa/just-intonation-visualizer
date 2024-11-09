@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import sounddevice as sd
-import librosa
 import numpy as np
 import math
 
@@ -11,7 +10,8 @@ import just_analyze
 # グローバル変数の定義
 gauge_windows = []
 update_gauges = []
-global _pitch_list
+stream = None
+_pitch_list = []
 
 
 # メーターウィンドウを作成する
@@ -33,6 +33,7 @@ def create_meter_window(pitch_name):
     # 初期の針の位置を描画
     needle = canvas.create_line(150, 150, 150, 50, width=4, fill="red")
 
+    # 針の位置を更新する関数を返す
     def update_needle(position):
         # 針の角度を計算 (-1 から 1 の範囲で指定)
         angle = 30 + (120 * (position + 1) / 2)
@@ -47,21 +48,24 @@ def create_meter_window(pitch_name):
 # 音声入力ストリームの起動
 def start_audio_stream():
     # サンプリングレートとバッファサイズを設定
-    sample_rate = 22050
-    buffer_size = 65536
+    SAMPLE_RATE = 22050
+    STREAM_BUFFER_SIZE = 65536
 
     global stream
     stream = None
 
     print(f"Audio stream started")
 
+    # 音声入力のコールバック関数
     def audio_callback(indata, frames, time, status):
+        # エラーが発生した場合はエラーメッセージを表示
         if status:
             print(f"Error: {status}", flush=True)
         samples = np.squeeze(indata)
 
+        # 音声入力を解析
         try:
-            evallist = just_analyze.analyze(samples, sample_rate, _pitch_list)
+            evallist = just_analyze.analyze(samples, SAMPLE_RATE, _pitch_list)
 
             # 各メーターを更新
             for i, deviation in enumerate(evallist):
@@ -71,11 +75,12 @@ def start_audio_stream():
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
 
+    # 音声入力ストリームの作成
     stream = sd.InputStream(
         callback=audio_callback,
         channels=1,
-        samplerate=sample_rate,
-        blocksize=buffer_size,
+        samplerate=SAMPLE_RATE,
+        blocksize=STREAM_BUFFER_SIZE,
     )
     stream.start()
 
@@ -94,40 +99,29 @@ def build(parent, pitch_list):
     global _pitch_list
     _pitch_list = pitch_list
 
-    frame_inputsound = ttk.Frame(parent)
-    frame_inputsound.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-    frame_inputchord = ttk.Frame(parent)
-    frame_inputchord.pack(side=tk.TOP)
-
-    inputchord_title = tk.Label(frame_inputchord, text="演奏音入力")
-    inputchord_title.pack(side=tk.LEFT, fill=tk.X)
-
-    frame_inputpitchname = ttk.Frame(frame_inputchord)
-    frame_inputpitchname.pack(side=tk.LEFT, fill=tk.X)
-
-    input_pitchname.build(frame_inputpitchname, pitch_list)
-
     # メーターウィンドウを作成するボタン
     meter_button = ttk.Button(
-        frame_inputsound, text="メーターを表示", command=lambda: start_meter(pitch_list)
+        parent, text="メーターを表示", command=lambda: start_meter(pitch_list)
     )
     meter_button.pack(pady=10)
 
-    # ボタンを作成してリアルタイム音声解析を開始
+    # リアルタイム音声解析を開始するボタン
     start_button = ttk.Button(
-        frame_inputsound,
+        parent,
         text="リアルタイム解析開始",
         command=start_audio_stream,
     )
     start_button.pack(pady=10)
 
-    stop_button = ttk.Button(
-        frame_inputsound, text="解析停止", command=stop_audio_stream
-    )
+    # リアルタイム音声解析を停止するボタン
+    stop_button = ttk.Button(parent, text="解析停止", command=stop_audio_stream)
     stop_button.pack(pady=10)
 
+    # 演奏音入力部分の作成
+    input_pitchname.build_with_title(parent, pitch_list)
 
+
+# メーターを起動
 def start_meter(pitch_list):
     global gauge_windows, update_gauges
     gauge_windows.clear()

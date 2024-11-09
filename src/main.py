@@ -5,7 +5,7 @@ import fromfile
 import configuration
 import fromsound
 
-
+# 演奏音を格納するリスト
 pitch_list = []
 
 
@@ -17,6 +17,7 @@ def main():
         message_window.insert(tk.END, message + "\n")  # メッセージを追加
         message_window.configure(state="disabled")  # 編集不可に戻す
 
+    # メインウィンドウの作成
     root = tk.Tk()
     title_text = "純正律 判定"
     root.title(title_text)
@@ -39,12 +40,7 @@ def main():
     notebook.add(tab_configuration, text="設定")
     notebook.pack(expand=True, fill="both", padx=10, pady=10)
 
-    # メッセージウィンドウの定義（タブにtext_widgetを渡すため）
-    # frame_message_text = tk.Frame(root)
-    # message_window = tk.Text(frame_message_text)
-
     # ファイル読み込みモードの作成
-    # fromfile.build(tab_fromfile, pitch_list, message_window)
     fromfile.build(tab_fromfile, pitch_list, update_message_window)
 
     # 音声入力モードの作成
@@ -53,7 +49,7 @@ def main():
     # 設定タブの作成
     configuration.build(tab_configuration)
 
-    # メッセージラベルのフレームを作成し、左寄せ
+    # メッセージラベルのフレームを作成
     frame_message_label = tk.Frame(root)
     frame_message_label.pack(anchor="w", padx=10)  # 左寄せ
 
@@ -64,8 +60,9 @@ def main():
     frame_message_text = tk.Frame(root)
     frame_message_text.pack(fill=tk.X, padx=10, pady=10)
 
+    # メッセージウィンドウを作成
     message_window = tk.Text(frame_message_text)
-    message_window.pack(anchor="w")  # テキストを左寄せ
+    message_window.pack(anchor="w")
     message_window.configure(state="disabled")
 
     root.mainloop()

@@ -6,8 +6,9 @@ import numpy as np
 import dict
 
 
+# スペクトルを評価
 def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
-    # STFT に対する評価
+    # FFT に対する評価
     # spec: 各周波数に対するスペクトル（強さ）
     # freq: 周波数ビン（sr = 22050, NFFT = 65536 で 0.336Hz 刻み  sr / NFFT で計算できる）
     # pitch_name_list: 演奏される音の音名と根音の情報 (pitch, is_root) のタプル
@@ -17,7 +18,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
     if len(t) > 1:
         spec = np.sum(spec, axis=1)
 
-    # dict より音名から freq を取得
+    # dict より音名から 周波数 を取得
     est_freqs = dict.get_freqs(pitch_name_list)
 
     if est_freqs == "":
@@ -25,9 +26,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
 
     # 各演奏ピッチに対して評価
     # eval_list: 演奏音が評価範囲のどこに位置するかを格納
-    # center_freq_list: 評価範囲の中心のindex を格納
     eval_list = []
-    center_index_list = []
     count = 0
     for est_f in est_freqs:
         target_freq = 1e10
@@ -41,7 +40,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
             else:
                 break
 
-        # 近傍の周波数スペクトルを評価
+        # 近傍の周波数のスペクトルを評価
         # 中心から ± EVAL_RANGE の範囲を評価
         eval_range_min = target_idx - EVAL_RANGE
         eval_range_max = target_idx + EVAL_RANGE + 1
