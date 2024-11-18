@@ -20,8 +20,8 @@ def create_meter_window(pitch_name):
 
     # メーターの示す数値を描画
     canvas.create_text(150, 180, text="0", font=("Helvetica", 12))
-    canvas.create_text(50, 180, text="-1", font=("Helvetica", 12))
-    canvas.create_text(250, 180, text="1", font=("Helvetica", 12))
+    canvas.create_text(50, 180, text="-50cents", font=("Helvetica", 12))
+    canvas.create_text(250, 180, text="50cents", font=("Helvetica", 12))
 
     # 目盛りを追加
     for i in range(-10, 11):
