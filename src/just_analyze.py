@@ -7,14 +7,14 @@ import dict
 
 
 # スペクトルを評価
-def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
+def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
     # FFT に対する評価
     # spec: 各周波数に対するスペクトル（強さ）
     # freq: 周波数ビン（sr = 22050, NFFT = 65536 で 0.336Hz 刻み  sr / NFFT で計算できる）
     # pitch_name_list: 演奏される音の音名と根音の情報 (pitch, is_root) のタプル
 
-    # -前処理
-    # -複数セグメントある場合に足し合わせる
+    # 前処理
+    # 複数セグメントある場合に足し合わせる
     if len(t) > 1:
         spec = np.sum(spec, axis=1)
 
@@ -27,31 +27,32 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=5):
     # 各演奏ピッチに対して評価
     # eval_list: 演奏音が評価範囲のどこに位置するかを格納
     eval_list = []
-    count = 0
     for est_f in est_freqs:
         target_freq = 1e10
         target_idx = -1
 
         # 周波数ビンの中から最も近いものを探索
-        for f in freq:
+        for idx, f in enumerate(freq):
             if abs(est_f - f) < abs(est_f - target_freq):
                 target_freq = f
-                target_idx += 1
+                target_idx = idx
             else:
                 break
 
         # 近傍の周波数のスペクトルを評価
-        # 中心から ± EVAL_RANGE の範囲を評価
-        eval_range_min = target_idx - EVAL_RANGE
-        eval_range_max = target_idx + EVAL_RANGE + 1
-        center = (eval_range_max - eval_range_min) / 2
-        around_spec = spec[eval_range_min:eval_range_max]
+        # ±50cents に最も近いスペクトルを取得
+        min_freq = est_f * (2 ** (-EVAL_RANGE / 1200))
+        max_freq = est_f * (2 ** (EVAL_RANGE / 1200))
+
+        eval_range_min = max(0, target_idx - int((target_freq - min_freq) / (freq[1] - freq[0])))
+        eval_range_max = min(len(spec), target_idx + int((max_freq - target_freq) / (freq[1] - freq[0])) + 1)
+        
+        center = (eval_range_max - eval_range_min) // 2
+        eval_spec = spec[eval_range_min:eval_range_max]
 
         # np.argmax で最も強いスペクトルをもつもののindex を取得
         # (-1, 1) に丸めてリストに追加
-        eval_list.append((np.argmax(around_spec) - center) / EVAL_RANGE)
-
-        count += 1
+        eval_list.append(round((np.argmax(eval_spec) - center) / center, 2))
 
     return eval_list
 
