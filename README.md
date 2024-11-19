@@ -1,34 +1,25 @@
-# 概要
+# 環境構築
 
-大村研究室 学部 4 年生での研究「純正律での和音演奏を支援するシステムの構築」の開発リポジトリ
-
-# commands
-
-### 開発環境作成
-
-仮想環境作成
-
+- 仮想環境の作成
+Python3.9.* をインストールしたうえで以下を実行
 ```
-python -m venv [envname]
+py -3.9 -m venv [envname]
 ```
 
-パッケージインストール
+- 仮想環境を有効化
 
 ```
-pip install pytk
-pip install librosa
-pip install sounddevice
-pip install matplotlib
-pip install pyinstaller
+.\[envname]\Scripts\activate
 ```
 
-### 開発環境立ち上げ
+- パッケージのインストール
+  **仮想環境を有効化した状態で**以下を実行
 
 ```
-[envname]/Scripts/activate
+pip install -r requirements.txt
 ```
 
-### 終了
+- 仮想環境を終了
 
 ```
 deactivate
