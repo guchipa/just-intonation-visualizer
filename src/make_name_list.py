@@ -1,22 +1,17 @@
-name_dict = {
-    1: "C",
-    2: "C#(D♭)",
-    3: "D",
-    4: "D#(E♭)",
-    5: "E",
-    6: "F",
-    7: "F#(G♭)",
-    8: "G",
-    9: "G#(A♭)",
-    10: "A",
-    11: "A#(B♭)",
-    12: "B",
-}
+import json
 
-f = open("./name_list.txt", "w")
+with open("../config/constants.json", "r") as f:
+    constants = json.load(f)
+
+name_dict = constants["name_dict"]
+
+name_list = []
 
 for i in range(1, 7):
     for j in range(1, 13):
-        f.write(f'"{name_dict[j]}{i}",\n')
+        name_list.append(f"{name_dict[str(j)]}{i}")
 
-f.close()
+constants["name_list"] = name_list
+
+with open("../config/constants.json", "w") as f:
+    json.dump(constants, f, indent=4)
