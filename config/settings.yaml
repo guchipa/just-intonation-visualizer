@@ -1,7 +1,0 @@
-A4_FREQ: 440
-title_text: "純正律 判定"
-iconfile: "./myfavicon.ico"
-geometry: "500x500"
-EVAL_RANGE: 50
-SAMPLE_RATE: 22050
-STREAM_BUFFER_SIZE: 65536

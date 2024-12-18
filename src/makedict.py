@@ -1,21 +1,25 @@
-import json
-import yaml
+name_dict = {
+    1: "C",
+    2: "C#(D♭)",
+    3: "D",
+    4: "D#(E♭)",
+    5: "E",
+    6: "F",
+    7: "F#(G♭)",
+    8: "G",
+    9: "G#(A♭)",
+    10: "A",
+    11: "A#(B♭)",
+    12: "B",
+}
 
-# Load constants and settings
-with open('../config/constants.json', 'r') as f:
-    constants = json.load(f)
+f = open("./dict.txt", "w")
 
-with open('../config/settings.yaml', 'r') as f:
-    settings = yaml.safe_load(f)
+A4_FREQ = 440
 
-name_dict = constants["name_dict"]
-A4_FREQ = settings["A4_FREQ"]
+for i in range(1, 7):
+    for j in range(1, 13):
+        base = A4_FREQ * (2 ** (i - 4))
+        f.write(f'"{name_dict[j]}{i}": {base * (2 ** ((j - 10) / 12))},\n')
 
-with open("../config/constants.json", "w") as f:
-    for i in range(1, 7):
-        for j in range(1, 13):
-            base = A4_FREQ * (2 ** (i - 4))
-            f.write(f'"{name_dict[str(j)]}{i}": {base * (2 ** ((j - 10) / 12))},\n')
-    
-    
-    
+f.close()
