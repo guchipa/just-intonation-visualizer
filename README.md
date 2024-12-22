@@ -24,3 +24,10 @@ pip install -r requirements.txt
 ```
 deactivate
 ```
+
+---
+
+# トラブルシューティング
+#### `main.py` を実行してもウィンドウが表示されない
+カレントディレクトリが`main.py`を含む場所にあるかを確認する．<br>
+`python .\path\to\main\main.py`のような実行は現状できない．
