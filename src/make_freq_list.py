@@ -1,25 +1,23 @@
-name_dict = {
-    1: "C",
-    2: "C#(D♭)",
-    3: "D",
-    4: "D#(E♭)",
-    5: "E",
-    6: "F",
-    7: "F#(G♭)",
-    8: "G",
-    9: "G#(A♭)",
-    10: "A",
-    11: "A#(B♭)",
-    12: "B",
-}
+import json
 
-f = open("./freq_list.txt", "w")
+def make_freq_list():
+    with open("../config/constants.json", "r") as f:
+        constants = json.load(f)
+        name_dict = constants["name_dict"]
+        A4_FREQ = constants["A4_FREQ"]
 
-A4_FREQ = 440
+    freq_list = []
+    for i in range(1, 7):
+        for j in range(1, 13):
+            base = A4_FREQ * (2 ** (i - 4))
+            freq = base * (2 ** ((j - 10) / 12))
+            freq_list.append(freq)
 
-for i in range(1, 7):
-    for j in range(1, 13):
-        base = A4_FREQ * (2 ** (i - 4))
-        f.write(f"{base * (2 ** ((j - 10) / 12))},\n")
+    # Write frequency list to constants.json
+    with open("../config/constants.json", "r") as json_file:
+        data = json.load(json_file)
 
-f.close()
+    data["freq_list"] = freq_list
+
+    with open("../config/constants.json", "w") as json_file:
+        json.dump(data, json_file, indent=4)
