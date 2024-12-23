@@ -44,6 +44,10 @@ def create_meter_window(pitch_name):
 
     # 針の角度を計算 (-1 から 1 の範囲で指定)
     def update_needle(position):
+        # 更新しない場合
+        if position == None:
+            return
+        
         angle = 30 + (120 * (position + 1) / 2)
         radians = math.radians(angle)
         x = 150 + 120 * math.cos(radians)
