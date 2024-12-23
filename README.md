@@ -25,6 +25,11 @@ pip install -r requirements.txt
 deactivate
 ```
 
+# 実行ファイル（.exe）の作成
+```
+pyinstaller --icon=sample.ico test.py
+```
+
 ---
 
 # トラブルシューティング
