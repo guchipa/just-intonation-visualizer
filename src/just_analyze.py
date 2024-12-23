@@ -51,8 +51,14 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
         eval_spec = spec[eval_range_min:eval_range_max]
 
         # np.argmax で最も強いスペクトルをもつもののindex を取得
+        spec_max = np.argmax(eval_spec)
+        
+        # spec_max が閾値以下の場合は None を返す
+        if eval_spec[spec_max] < 1e-5:
+            eval_list.append(None)
+        
         # (-1, 1) に丸めてリストに追加
-        eval_list.append(round((np.argmax(eval_spec) - center) / center, 2))
+        eval_list.append(round((spec_max - center) / center, 2))
 
     return eval_list
 
