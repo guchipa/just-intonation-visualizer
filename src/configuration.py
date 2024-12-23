@@ -13,47 +13,53 @@ def validate_numeric_input(P):
     else:
         return False
 
+
 def fetch_input_device():
     devices = sd.query_devices()
     device_names = [device["name"] for device in devices]
     return device_names
 
+
 def load_settings():
     with open("../config/settings.yaml", "r") as f:
-        settings = yaml.load(f, Loader=yaml.FullLoader) 
+        settings = yaml.load(f, Loader=yaml.FullLoader)
     return settings
+
 
 def load_constants():
     with open("../config/constants.json", "r") as f:
         constants = json.load(f)
-    return constants   
+    return constants
+
 
 def save_settings(take_log, a4_freq, input_device):
     # 入力デバイスの設定を保存
+    # 現在の設定を取得
+    settings = load_settings()
+    constants = load_constants()
+
+    # 設定を保存
+    with open("../config/settings.yaml", "w") as f:
+        settings["take_log"] = take_log
+        settings["input_device"] = input_device
+        yaml.dump(settings, f, indent=4)
+
+    with open("../config/constants.json", "w") as f:
+        constants["a4_freq"] = a4_freq
+        json.dump(constants, f, indent=4)
+
+    # a4_freq をもとに freq_list を再生成
+    make_freq_list.make_freq_list()
+
+    # 入力デバイスのインデックスを取得
     idx = 0
     for device in fetch_input_device():
         if input_device == device:
             sd.default.device = [idx, sd.default.device[1]]
             break
-        else :
+        else:
             idx += 1
-    
-    with open("../config/settings.yaml", "w") as f:
-        settings = {
-            "take_log": take_log,
-            "input_device": input_device
-        }
-        yaml.dump(settings, f, indent=4)
-        
-    with open("../config/constants.json", "w") as f:
-        constants = {
-            "a4_freq": a4_freq
-        }
-        json.dump(constants, f, indent=4)
-        
-    # a4_freq をもとに freq_list を再生成
-    make_freq_list.make_freq_list()
-        
+
     print("Settings saved")
 
 
@@ -102,18 +108,26 @@ def build(parent):
     label_input_device = tk.Label(frame_input_device, text="入力デバイス")
     label_input_device.pack(side=tk.LEFT, fill=tk.X)
 
-    input_device_list = fetch_input_device() # Fetch the list of input devices
-    input_device_var = tk.StringVar() # Create a StringVar object# Set the default value
+    input_device_list = fetch_input_device()  # Fetch the list of input devices
+    input_device_var = (
+        tk.StringVar()
+    )  # Create a StringVar object# Set the default value
     input_device = ttk.Combobox(
         frame_input_device,
         values=input_device_list,
         textvariable=input_device_var,
         state="readonly",
-        width=50  # Set the width to 50
+        width=50,  # Set the width to 50
     )
     input_device.set(settings["input_device"])
     input_device.pack(side=tk.RIGHT, fill=tk.X)
 
     # 設定を保存するボタン
-    save_button = ttk.Button(parent, text="設定を保存", command=lambda: save_settings(take_log.get(), a4_freq.get(), input_device.get()))
+    save_button = ttk.Button(
+        parent,
+        text="設定を保存",
+        command=lambda: save_settings(
+            take_log.get(), a4_freq.get(), input_device.get()
+        ),
+    )
     save_button.pack(pady=10)

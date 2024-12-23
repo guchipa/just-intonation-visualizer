@@ -3,8 +3,9 @@ import json
 def make_freq_list():
     with open("../config/constants.json", "r") as f:
         constants = json.load(f)
-        name_dict = constants["name_dict"]
-        A4_FREQ = constants["A4_FREQ"]
+        A4_FREQ = int(constants["a4_freq"])
+        
+    print(A4_FREQ)
 
     freq_list = []
     for i in range(1, 7):
