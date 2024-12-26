@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import sounddevice as sd
 import numpy as np
-import math
+import json
 
 import input_pitchname
 import just_analyze
@@ -17,9 +17,11 @@ _pitch_list = []
 
 # 音声入力ストリームの起動
 def start_audio_stream():
-    # サンプリングレートとバッファサイズを設定
-    SAMPLE_RATE = 22050
-    STREAM_BUFFER_SIZE = 65536
+    # サンプリングレートとバッファサイズを読み込む
+    with open("../config/constants.json", "r") as f:
+        constants = json.load(f)
+        SAMPLE_RATE = int(constants["sample_rate"])
+        STREAM_BUFFER_SIZE = int(constants["stream_buffer_size"])
 
     global stream
     stream = None

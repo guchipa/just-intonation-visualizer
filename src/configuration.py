@@ -32,7 +32,7 @@ def load_constants():
     return constants
 
 
-def save_settings(take_log, a4_freq, input_device):
+def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
     # 入力デバイスの設定を保存
     # 現在の設定を取得
     settings = load_settings()
@@ -46,6 +46,8 @@ def save_settings(take_log, a4_freq, input_device):
 
     with open("../config/constants.json", "w") as f:
         constants["a4_freq"] = a4_freq
+        constants["sample_rate"] = sample_rate
+        constants["stream_buffer_size"] = buffer_size
         json.dump(constants, f, indent=4)
 
     # a4_freq をもとに freq_list を再生成
@@ -101,6 +103,44 @@ def build(parent):
     )
     entry_a4_freq.pack(side=tk.RIGHT, fill=tk.X)
 
+    # サンプリング周波数の設定
+    frame_sample_rate = ttk.Frame(parent)
+    frame_sample_rate.pack(side=tk.TOP, padx=30, pady=10)
+
+    label_sample_rate = tk.Label(frame_sample_rate, text="サンプリング周波数 (Hz)")
+    label_sample_rate.pack(side=tk.LEFT, fill=tk.X)
+
+    sample_rate = tk.StringVar()
+    sample_rate.set(constants["sample_rate"])
+
+    validate_cmd = parent.register(validate_numeric_input)
+    entry_sample_rate = tk.Entry(
+        frame_sample_rate,
+        textvariable=sample_rate,
+        validate="key",
+        validatecommand=(validate_cmd, "%P"),
+    )
+    entry_sample_rate.pack(side=tk.RIGHT, fill=tk.X)
+
+    # リアルタイム入力のバッファサイズ設定
+    frame_buffer_size = ttk.Frame(parent)
+    frame_buffer_size.pack(side=tk.TOP, padx=30, pady=10)
+
+    label_buffer_size = tk.Label(frame_buffer_size, text="バッファサイズ")
+    label_buffer_size.pack(side=tk.LEFT, fill=tk.X)
+
+    buffer_size = tk.StringVar()
+    buffer_size.set(constants["stream_buffer_size"])
+
+    validate_cmd = parent.register(validate_numeric_input)
+    entry_buffer_size = tk.Entry(
+        frame_buffer_size,
+        textvariable=buffer_size,
+        validate="key",
+        validatecommand=(validate_cmd, "%P"),
+    )
+    entry_buffer_size.pack(side=tk.RIGHT, fill=tk.X)
+
     # リアルタイム入力に使用する入力デバイスの選択
     frame_input_device = ttk.Frame(parent)
     frame_input_device.pack(side=tk.TOP, padx=30, pady=10)
@@ -127,7 +167,11 @@ def build(parent):
         parent,
         text="設定を保存",
         command=lambda: save_settings(
-            take_log.get(), a4_freq.get(), input_device.get()
+            take_log.get(),
+            a4_freq.get(),
+            sample_rate.get(),
+            buffer_size.get(),
+            input_device.get(),
         ),
     )
     save_button.pack(pady=10)
