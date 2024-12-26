@@ -1,7 +1,7 @@
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-
+import json
 
 import dict
 
@@ -65,8 +65,13 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
 
 # ファイル入力での解析
 def analyze(file_path, pitch_list, show=False):
+    # 定数の読み込み
+    with open("../config/constants.json", "r") as f:
+        constants = json.load(f)
+        sr = constants["sample_rate"]
+        
     print("file loading...")
-    y, sr = librosa.load(file_path, sr=22050)
+    y, sr = librosa.load(file_path, sr=sr)
     print("ok")
     print(f"sampling rate: {sr}")
     print("analyzing...")
