@@ -14,14 +14,16 @@ def get_freqs(pitch_root_tuple):
 
     # 根音を探す
     for pitch, is_root in pitch_root_tuple:
-        if is_root:
+        # 根音の場合
+        if is_root and root_name == "":
             root_name = pitch
-            break
+            continue
+        elif is_root and root_name != "":
+            raise ValueError("根音が複数設定されています")
 
     # 根音が設定されていない場合
     if root_name == "":
-        print("ERROR: 根音が設定されていません")
-        return []
+        raise ValueError("根音が設定されていません")
 
     # 根音を基準に純正律の周波数を計算
     root_idx = name_list.index(root_name)
