@@ -57,4 +57,4 @@ def build(parent, pitch_list, update_message_window):
     read_button.pack(side=tk.LEFT, padx=(0, 10))
 
     # 演奏音入力部分の作成
-    input_pitchname.build_with_title(parent, pitch_list)
+    input_pitchname.build_with_title(parent, pitch_list, update_message_window)

@@ -44,10 +44,10 @@ def main():
         fromfile.build(tab_fromfile, pitch_list, update_message_window)
 
         # 音声入力モードの作成
-        fromsound.build(tab_fromsound, pitch_list)
+        fromsound.build(tab_fromsound, pitch_list, update_message_window)
 
         # 設定タブの作成
-        configuration.build(tab_configuration)
+        configuration.build(tab_configuration, update_message_window)
 
         # メッセージラベルのフレームを作成
         frame_message_label = tk.Frame(root)
@@ -68,6 +68,7 @@ def main():
         root.mainloop()
     except Exception as e:
         print(f"Error: {e}")
+        update_message_window(f"Error: {e}")
 
 
 if __name__ == "__main__":

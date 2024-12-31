@@ -3,20 +3,28 @@ from tkinter import ttk
 
 import json
 
+print_message = None
+
 # 演奏音リストに音を追加する
 def addbutton_handler(pitch_list, pitch_name, is_root):
     pitch_list.append((pitch_name, is_root))
     print(f"add: {(pitch_name, is_root)}")
     print(f"now: {pitch_list}")
+    print_message(f"構成音を追加しました: {pitch_name}" + ('(根音)' if is_root else ''))
+    print_message(f"現在の構成音: {pitch_list}")
 
 
 # 演奏音リストをクリアする
 def clearbutton_handler(pitch_list):
     pitch_list.clear()
     print("clear", f"now: {pitch_list}")
+    print_message("構成音をクリアしました")
 
 
-def build(parent, pitch_list):
+def build(parent, pitch_list, update_message_window):
+    global print_message
+    print_message = update_message_window
+    
     # 定数の読み込み
     with open("../config/constants.json", "r") as f:
         constants = json.load(f)
@@ -49,7 +57,7 @@ def build(parent, pitch_list):
 
 
 # 演奏音入力部分の作成
-def build_with_title(parent, pitch_list):
+def build_with_title(parent, pitch_list, update_message_window):
     frame_inputchord = ttk.Frame(parent)
     frame_inputchord.pack(side=tk.TOP)
 
@@ -59,4 +67,4 @@ def build_with_title(parent, pitch_list):
     frame_inputpitchname = ttk.Frame(frame_inputchord)
     frame_inputpitchname.pack(side=tk.LEFT, fill=tk.X)
 
-    build(frame_inputpitchname, pitch_list)
+    build(frame_inputpitchname, pitch_list, update_message_window)
