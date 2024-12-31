@@ -7,6 +7,9 @@ import yaml
 import make_freq_list
 
 
+print_message = None
+
+
 def validate_numeric_input(P):
     if P.isdigit() or P == "":
         return True
@@ -63,10 +66,14 @@ def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
             idx += 1
 
     print("Settings saved")
+    print_message("設定を保存しました。")
 
 
 # 設定タブの実装
-def build(parent):
+def build(parent, update_message_window):
+    global print_message
+    print_message = update_message_window
+    
     # 設定を読み込む
     settings = load_settings()
     constants = load_constants()

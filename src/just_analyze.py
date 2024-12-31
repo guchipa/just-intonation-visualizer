@@ -69,14 +69,9 @@ def analyze(file_path, pitch_list, show=False):
     with open("../config/constants.json", "r") as f:
         constants = json.load(f)
         sr = constants["sample_rate"]
-        
-    print("file loading...")
+
     y, sr = librosa.load(file_path, sr=sr)
-    print("ok")
-    print(f"sampling rate: {sr}")
-    print("analyzing...")
     spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
-    print(freq)
 
     print(eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list))
 

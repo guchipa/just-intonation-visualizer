@@ -13,6 +13,7 @@ gauge_windows = []
 update_gauges = []
 stream = None
 _pitch_list = []
+print_message = None
 
 
 # 音声入力ストリームの起動
@@ -27,12 +28,16 @@ def start_audio_stream():
     stream = None
 
     print(f"Audio stream started")
+    print_message("リアルタイム解析を開始しました。")
 
     # 音声入力のコールバック関数
     def audio_callback(indata, frames, time, status):
         # エラーが発生した場合はエラーメッセージを表示
         if status:
             print(f"Error: {status}", flush=True)
+            print_message(f"Error: {status}")
+            stop_audio_stream()
+            
         samples = np.squeeze(indata)
 
         # 音声入力を解析
@@ -46,6 +51,7 @@ def start_audio_stream():
 
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
+            print_message(f"Error : {e}")
             stop_audio_stream()
 
     # 音声入力ストリームの作成
@@ -65,12 +71,16 @@ def stop_audio_stream():
         stream.stop()
         stream.close()
         print("Audio stream stopped.")
+        print_message("リアルタイム解析を停止しました。")
 
 
 # リアルタイム入力タブのビルド
-def build(parent, pitch_list):
+def build(parent, pitch_list, update_message_window):
     global _pitch_list
     _pitch_list = pitch_list
+    
+    global print_message
+    print_message = update_message_window
 
     # メーターウィンドウを作成するボタン
     meter_button = ttk.Button(
@@ -91,7 +101,7 @@ def build(parent, pitch_list):
     stop_button.pack(pady=10)
 
     # 演奏音入力部分の作成
-    input_pitchname.build_with_title(parent, pitch_list)
+    input_pitchname.build_with_title(parent, pitch_list, update_message_window)
 
 
 # メーターを起動
