@@ -46,6 +46,7 @@ def start_audio_stream():
 
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
+            stop_audio_stream()
 
     # 音声入力ストリームの作成
     stream = sd.InputStream(

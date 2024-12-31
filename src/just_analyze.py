@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-import dict
+import calc_justfreq
 
 
 # スペクトルを評価
@@ -18,8 +18,8 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
     if len(t) > 1:
         spec = np.sum(spec, axis=1)
 
-    # dict より音名から 周波数 を取得
-    est_freqs = dict.get_freqs(pitch_name_list)
+    # calc_justfreq より音名から 周波数 を取得
+    est_freqs = calc_justfreq.get_freqs(pitch_name_list)
 
     if est_freqs == "":
         return
