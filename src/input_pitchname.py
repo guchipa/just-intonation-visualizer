@@ -11,7 +11,7 @@ def addbutton_handler(pitch_list, pitch_name, is_root):
     print(f"add: {(pitch_name, is_root)}")
     print(f"now: {pitch_list}")
     print_message(f"構成音を追加しました: {pitch_name}" + ('(根音)' if is_root else ''))
-    print_message(f"現在の構成音: {pitch_list}")
+    print_message(f"現在の構成音: {[pitch[0] for pitch in pitch_list]}")
 
 
 # 演奏音リストをクリアする
