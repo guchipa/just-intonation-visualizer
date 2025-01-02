@@ -7,6 +7,8 @@ import json
 import input_pitchname
 import just_analyze
 from meter import create_meter_window
+import sol_path
+
 
 # グローバル変数の定義
 gauge_windows = []
@@ -19,7 +21,7 @@ print_message = None
 # 音声入力ストリームの起動
 def start_audio_stream():
     # サンプリングレートとバッファサイズを読み込む
-    with open("../config/constants.json", "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r") as f:
         constants = json.load(f)
         SAMPLE_RATE = int(constants["sample_rate"])
         STREAM_BUFFER_SIZE = int(constants["stream_buffer_size"])
@@ -37,7 +39,7 @@ def start_audio_stream():
             print(f"Error: {status}", flush=True)
             print_message(f"Error: {status}")
             stop_audio_stream()
-            
+
         samples = np.squeeze(indata)
 
         # 音声入力を解析
@@ -78,13 +80,13 @@ def stop_audio_stream():
 def build(parent, pitch_list, update_message_window):
     global _pitch_list
     _pitch_list = pitch_list
-    
+
     global print_message
     print_message = update_message_window
 
     # 演奏音入力部分の作成
     input_pitchname.build_with_title(parent, pitch_list, update_message_window)
-    
+
     # メーターウィンドウを作成するボタン
     meter_button = ttk.Button(
         parent, text="メーターを表示", command=lambda: start_meter(pitch_list)
@@ -102,7 +104,6 @@ def build(parent, pitch_list, update_message_window):
     # リアルタイム音声解析を停止するボタン
     stop_button = ttk.Button(parent, text="解析停止", command=stop_audio_stream)
     stop_button.pack(pady=10)
-
 
 
 # メーターを起動

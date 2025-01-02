@@ -4,6 +4,7 @@ import numpy as np
 import json
 
 import calc_justfreq
+import sol_path
 
 
 # スペクトルを評価
@@ -44,19 +45,24 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
         min_freq = est_f * (2 ** (-EVAL_RANGE / 1200))
         max_freq = est_f * (2 ** (EVAL_RANGE / 1200))
 
-        eval_range_min = max(0, target_idx - int((target_freq - min_freq) / (freq[1] - freq[0])))
-        eval_range_max = min(len(spec), target_idx + int((max_freq - target_freq) / (freq[1] - freq[0])) + 1)
-        
+        eval_range_min = max(
+            0, target_idx - int((target_freq - min_freq) / (freq[1] - freq[0]))
+        )
+        eval_range_max = min(
+            len(spec),
+            target_idx + int((max_freq - target_freq) / (freq[1] - freq[0])) + 1,
+        )
+
         center = (eval_range_max - eval_range_min) // 2
         eval_spec = spec[eval_range_min:eval_range_max]
 
         # np.argmax で最も強いスペクトルをもつもののindex を取得
         spec_max = np.argmax(eval_spec)
-        
+
         # spec_max が閾値以下の場合は None を返す
         if eval_spec[spec_max] < 1e-5:
             eval_list.append(None)
-        
+
         # (-1, 1) に丸めてリストに追加
         eval_list.append(round((spec_max - center) / center, 2))
 
@@ -66,7 +72,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
 # ファイル入力での解析
 def analyze(file_path, pitch_list, show=False):
     # 定数の読み込み
-    with open("../config/constants.json", "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r") as f:
         constants = json.load(f)
         sr = constants["sample_rate"]
 

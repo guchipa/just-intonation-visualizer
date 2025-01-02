@@ -5,7 +5,7 @@ import json
 import yaml
 
 import make_freq_list
-
+import sol_path
 
 print_message = None
 
@@ -24,13 +24,13 @@ def fetch_input_device():
 
 
 def load_settings():
-    with open("../config/settings.yaml", "r") as f:
+    with open(sol_path.resolve("config/settings.yaml"), "r") as f:
         settings = yaml.load(f, Loader=yaml.FullLoader)
     return settings
 
 
 def load_constants():
-    with open("../config/constants.json", "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r") as f:
         constants = json.load(f)
     return constants
 
@@ -42,12 +42,12 @@ def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
     constants = load_constants()
 
     # 設定を保存
-    with open("../config/settings.yaml", "w") as f:
+    with open(sol_path.resolve("config/settings.yaml"), "w") as f:
         settings["take_log"] = take_log
         settings["input_device"] = input_device
         yaml.dump(settings, f, indent=4)
 
-    with open("../config/constants.json", "w") as f:
+    with open(sol_path.resolve("config/constants.json"), "w") as f:
         constants["a4_freq"] = int(a4_freq)
         constants["sample_rate"] = int(sample_rate)
         constants["stream_buffer_size"] = int(buffer_size)
@@ -73,7 +73,7 @@ def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
 def build(parent, update_message_window):
     global print_message
     print_message = update_message_window
-    
+
     # 設定を読み込む
     settings = load_settings()
     constants = load_constants()

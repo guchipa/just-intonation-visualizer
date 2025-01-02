@@ -2,15 +2,16 @@ import tkinter as tk
 from tkinter import ttk
 
 import json
-
+import sol_path
 print_message = None
+
 
 # 演奏音リストに音を追加する
 def addbutton_handler(pitch_list, pitch_name, is_root):
     pitch_list.append((pitch_name, is_root))
     print(f"add: {(pitch_name, is_root)}")
     print(f"now: {pitch_list}")
-    print_message(f"構成音を追加しました: {pitch_name}" + ('(根音)' if is_root else ''))
+    print_message(f"構成音を追加しました: {pitch_name}" + ("(根音)" if is_root else ""))
     print_message(f"現在の構成音: {[pitch[0] for pitch in pitch_list]}")
 
 
@@ -24,12 +25,12 @@ def clearbutton_handler(pitch_list):
 def build(parent, pitch_list, update_message_window):
     global print_message
     print_message = update_message_window
-    
+
     # 定数の読み込み
-    with open("../config/constants.json", "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r") as f:
         constants = json.load(f)
         name_list = constants["name_list"]
-        
+
     # 演奏音を選択するコンボボックス（プルダウンメニュー）を作成
     pitchname = tk.StringVar()
     combo_pitchname = ttk.Combobox(

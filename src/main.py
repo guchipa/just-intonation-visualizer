@@ -4,6 +4,7 @@ from tkinter import ttk
 # import fromfile
 import fromsound
 import configuration
+import sol_path
 
 # 演奏音を格納するリスト
 pitch_list = []
@@ -21,7 +22,7 @@ def main():
         root = tk.Tk()
         title_text = "純正律 判定"
         root.title(title_text)
-        iconfile = "./myfavicon.ico"
+        iconfile = sol_path.resolve("myfavicon.ico")
         root.iconbitmap(default=iconfile)
         root.geometry("500x500")
 
