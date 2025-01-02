@@ -59,7 +59,7 @@ def build(parent, pitch_list, update_message_window):
 # 演奏音入力部分の作成
 def build_with_title(parent, pitch_list, update_message_window):
     frame_inputchord = ttk.Frame(parent)
-    frame_inputchord.pack(side=tk.TOP)
+    frame_inputchord.pack(side=tk.TOP, pady=10)
 
     inputchord_title = tk.Label(frame_inputchord, text="演奏音入力")
     inputchord_title.pack(side=tk.LEFT, fill=tk.X)

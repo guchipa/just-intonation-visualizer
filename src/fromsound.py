@@ -82,6 +82,9 @@ def build(parent, pitch_list, update_message_window):
     global print_message
     print_message = update_message_window
 
+    # 演奏音入力部分の作成
+    input_pitchname.build_with_title(parent, pitch_list, update_message_window)
+    
     # メーターウィンドウを作成するボタン
     meter_button = ttk.Button(
         parent, text="メーターを表示", command=lambda: start_meter(pitch_list)
@@ -100,8 +103,6 @@ def build(parent, pitch_list, update_message_window):
     stop_button = ttk.Button(parent, text="解析停止", command=stop_audio_stream)
     stop_button.pack(pady=10)
 
-    # 演奏音入力部分の作成
-    input_pitchname.build_with_title(parent, pitch_list, update_message_window)
 
 
 # メーターを起動
