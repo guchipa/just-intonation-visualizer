@@ -37,13 +37,3 @@ exe = EXE(
     entitlements_file=None,
     icon=['myfavicon.ico']
 )
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='JustInTone'
-)
