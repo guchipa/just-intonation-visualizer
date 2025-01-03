@@ -24,13 +24,13 @@ def fetch_input_device():
 
 
 def load_settings():
-    with open(sol_path.resolve("config/settings.yaml"), "r") as f:
+    with open(sol_path.resolve("config/settings.yaml"), "r", encoding="utf-8") as f:
         settings = yaml.load(f, Loader=yaml.FullLoader)
     return settings
 
 
 def load_constants():
-    with open(sol_path.resolve("config/constants.json"), "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
     return constants
 
@@ -47,7 +47,7 @@ def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
         settings["input_device"] = input_device
         yaml.dump(settings, f, indent=4, allow_unicode=True)
 
-    with open(sol_path.resolve("config/constants.json"), "w") as f:
+    with open(sol_path.resolve("config/constants.json"), "w", encoding="utf-8") as f:
         constants["a4_freq"] = int(a4_freq)
         constants["sample_rate"] = int(sample_rate)
         constants["stream_buffer_size"] = int(buffer_size)

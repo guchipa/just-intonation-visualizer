@@ -21,7 +21,7 @@ print_message = None
 # 音声入力ストリームの起動
 def start_audio_stream():
     # サンプリングレートとバッファサイズを読み込む
-    with open(sol_path.resolve("config/constants.json"), "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
         SAMPLE_RATE = int(constants["sample_rate"])
         STREAM_BUFFER_SIZE = int(constants["stream_buffer_size"])

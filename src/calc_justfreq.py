@@ -6,7 +6,7 @@ import sol_path
 # 純正律の周波数を計算
 def get_freqs(pitch_root_tuple):
     # 定数の読み込み
-    with open(sol_path.resolve("config/constants.json"), "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
         name_list = constants["name_list"]
         freq_list = constants["freq_list"]

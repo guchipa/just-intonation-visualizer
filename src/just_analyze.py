@@ -72,7 +72,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
 # ファイル入力での解析
 def analyze(file_path, pitch_list, show=False):
     # 定数の読み込み
-    with open(sol_path.resolve("config/constants.json"), "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
         sr = constants["sample_rate"]
 
