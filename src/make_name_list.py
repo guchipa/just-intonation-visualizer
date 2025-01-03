@@ -1,6 +1,8 @@
 import json
 
-with open("../config/constants.json", "r") as f:
+import sol_path
+
+with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
     constants = json.load(f)
 
 name_dict = constants["name_dict"]
@@ -13,5 +15,5 @@ for i in range(1, 7):
 
 constants["name_list"] = name_list
 
-with open("../config/constants.json", "w") as f:
-    json.dump(constants, f, indent=4)
+with open(sol_path.resolve("config/constants.json"), "w", encoding="utf-8") as f:
+    json.dump(constants, f, indent=4, ensure_ascii=False)

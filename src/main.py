@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-import fromfile
-import configuration
+# import fromfile
 import fromsound
+import configuration
+import sol_path
 
 # 演奏音を格納するリスト
 pitch_list = []
@@ -21,7 +22,7 @@ def main():
         root = tk.Tk()
         title_text = "純正律 判定"
         root.title(title_text)
-        iconfile = "./myfavicon.ico"
+        iconfile = sol_path.resolve("myfavicon.ico")
         root.iconbitmap(default=iconfile)
         root.geometry("500x500")
 
@@ -30,18 +31,18 @@ def main():
         notebook = ttk.Notebook(root)
 
         # タブの作成
-        tab_fromfile = tk.Frame(notebook)
+        # tab_fromfile = tk.Frame(notebook)
         tab_fromsound = tk.Frame(notebook)
         tab_configuration = tk.Frame(notebook)
 
         # notebook へタブを追加
-        notebook.add(tab_fromfile, text="ファイル読み込み")
+        # notebook.add(tab_fromfile, text="ファイル読み込み")
         notebook.add(tab_fromsound, text="音声入力")
         notebook.add(tab_configuration, text="設定")
         notebook.pack(expand=True, fill="both", padx=10, pady=10)
 
         # ファイル読み込みモードの作成
-        fromfile.build(tab_fromfile, pitch_list, update_message_window)
+        # fromfile.build(tab_fromfile, pitch_list, update_message_window)
 
         # 音声入力モードの作成
         fromsound.build(tab_fromsound, pitch_list, update_message_window)

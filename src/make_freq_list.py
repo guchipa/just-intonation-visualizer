@@ -1,7 +1,9 @@
 import json
 
+import sol_path
+
 def make_freq_list():
-    with open("../config/constants.json", "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
         A4_FREQ = constants["a4_freq"]
 
@@ -13,10 +15,10 @@ def make_freq_list():
             freq_list.append(freq)
 
     # Write frequency list to constants.json
-    with open("../config/constants.json", "r") as json_file:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
 
     data["freq_list"] = freq_list
 
-    with open("../config/constants.json", "w") as json_file:
-        json.dump(data, json_file, indent=4)
+    with open(sol_path.resolve("config/constants.json"), "w", encoding="utf-8") as json_file:
+        json.dump(data, json_file, indent=4, ensure_ascii=False)
