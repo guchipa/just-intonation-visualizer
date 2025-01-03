@@ -16,4 +16,4 @@ for i in range(1, 7):
 constants["name_list"] = name_list
 
 with open(sol_path.resolve("config/constants.json"), "w") as f:
-    json.dump(constants, f, indent=4)
+    json.dump(constants, f, indent=4, ensure_ascii=False)

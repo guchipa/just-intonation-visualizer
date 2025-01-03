@@ -21,4 +21,4 @@ def make_freq_list():
     data["freq_list"] = freq_list
 
     with open(sol_path.resolve("config/constants.json"), "w") as json_file:
-        json.dump(data, json_file, indent=4)
+        json.dump(data, json_file, indent=4, ensure_ascii=False)

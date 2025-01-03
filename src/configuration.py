@@ -42,16 +42,16 @@ def save_settings(take_log, a4_freq, sample_rate, buffer_size, input_device):
     constants = load_constants()
 
     # 設定を保存
-    with open(sol_path.resolve("config/settings.yaml"), "w") as f:
+    with open(sol_path.resolve("config/settings.yaml"), "w", encoding="utf-8") as f:
         settings["take_log"] = take_log
         settings["input_device"] = input_device
-        yaml.dump(settings, f, indent=4)
+        yaml.dump(settings, f, indent=4, allow_unicode=True)
 
     with open(sol_path.resolve("config/constants.json"), "w") as f:
         constants["a4_freq"] = int(a4_freq)
         constants["sample_rate"] = int(sample_rate)
         constants["stream_buffer_size"] = int(buffer_size)
-        json.dump(constants, f, indent=4)
+        json.dump(constants, f, indent=4, ensure_ascii=False)
 
     # a4_freq をもとに freq_list を再生成
     make_freq_list.make_freq_list()

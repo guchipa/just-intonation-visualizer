@@ -27,7 +27,7 @@ def build(parent, pitch_list, update_message_window):
     print_message = update_message_window
 
     # 定数の読み込み
-    with open(sol_path.resolve("config/constants.json"), "r") as f:
+    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
         constants = json.load(f)
         name_list = constants["name_list"]
 
