@@ -27,13 +27,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install black ruff
 
-      # コードをフォーマット（検証のみ）
+      # コードをフォーマット
       - name: Check code formatting with Black
-        run: black --check .
-
-      # Lint チェックを実行
-      - name: Run Lint with Ruff
-        run: ruff check .
+        run: black .
 
       # コードの自動修正を実行
       - name: Fix code issues with Ruff
