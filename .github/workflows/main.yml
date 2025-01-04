@@ -1,0 +1,46 @@
+name: Format and Lint with Black and Ruff
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  format-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # コードをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Python をセットアップ
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 必要なパッケージをインストール
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black ruff
+
+      # コードをフォーマット（検証のみ）
+      - name: Check code formatting with Black
+        run: black --check .
+
+      # Lint チェックを実行
+      - name: Run Lint with Ruff
+        run: ruff check .
+
+      # コードの自動修正を実行
+      - name: Fix code issues with Ruff
+        run: ruff check . --fix
+
+      # 修正結果をプッシュ
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
