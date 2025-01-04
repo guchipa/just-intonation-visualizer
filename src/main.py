@@ -11,7 +11,7 @@ pitch_list = []
 
 
 def main():
-    try: 
+    try:
         # メッセージウィンドウの更新関数
         def update_message_window(message):
             message_window.configure(state="normal")  # 編集可能にする

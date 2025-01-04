@@ -29,7 +29,7 @@ def create_meter_window(pitch_name):
         radians = math.radians(angle)
         x_start = 150 + 130 * math.cos(radians)
         y_start = 190 - 130 * math.sin(radians)
-        
+
         # 中心と端点の座標を計算
         if i in [-10, 0, 10]:
             x_end = 150 + 115 * math.cos(radians)
@@ -45,9 +45,9 @@ def create_meter_window(pitch_name):
     # 針の角度を計算 (-1 から 1 の範囲で指定)
     def update_needle(position):
         # 更新しない場合
-        if position == None:
+        if position is None:
             return
-        
+
         angle = 30 + (120 * (position + 1) / 2)
         radians = math.radians(angle)
         x = 150 + 120 * math.cos(radians)

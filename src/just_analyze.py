@@ -81,17 +81,17 @@ def analyze(file_path, pitch_list, show=False):
 
     print(eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list))
 
-    if show == True:
+    if show is True:
         plt.show()
         print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")
 
 
 # データを受け取って解析
-def analyze(y, sr, pitch_list, show=False):
-    spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
+# def analyze(y, sr, pitch_list, show=False):
+#     spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
 
-    return eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list)
+#     return eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list)
 
-    if show == True:
-        plt.show()
-        print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")
+#     if show is True:
+#         plt.show()
+#         print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")

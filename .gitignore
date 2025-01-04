@@ -4,3 +4,4 @@ venv
 config
 build
 dist
+.vscode

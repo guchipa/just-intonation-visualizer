@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import ttk
 import sounddevice as sd
 import numpy as np
@@ -29,7 +28,7 @@ def start_audio_stream():
     global stream
     stream = None
 
-    print(f"Audio stream started")
+    print("Audio stream started")
     print_message("リアルタイム解析を開始しました。")
 
     # 音声入力のコールバック関数

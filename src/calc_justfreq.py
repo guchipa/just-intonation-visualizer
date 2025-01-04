@@ -3,6 +3,7 @@ import json
 
 import sol_path
 
+
 # 純正律の周波数を計算
 def get_freqs(pitch_root_tuple):
     # 定数の読み込み

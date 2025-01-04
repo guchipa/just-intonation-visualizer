@@ -3,6 +3,7 @@ from tkinter import ttk
 
 import json
 import sol_path
+
 print_message = None
 
 

@@ -1,6 +1,7 @@
 import sys
 import os
 
+
 def resolve(filename):
     if getattr(sys, "frozen", False):
         # The application is frozen
