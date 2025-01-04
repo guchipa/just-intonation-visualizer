@@ -27,16 +27,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install black ruff
 
-      # コードをフォーマット
+      # コードフォーマットを検証
       - name: Check code formatting with Black
-        run: black .
+        run: black --check .
 
-      # コードの自動修正を実行
+      # lint チェックを実行
       - name: Fix code issues with Ruff
-        run: ruff check . --fix
-
-      # 修正結果をプッシュ
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: ruff check . --show-source
