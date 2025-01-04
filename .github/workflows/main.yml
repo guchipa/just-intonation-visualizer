@@ -33,4 +33,4 @@ jobs:
 
       # lint チェックを実行
       - name: Fix code issues with Ruff
-        run: ruff check . --show-source
+        run: ruff check . --show-files
