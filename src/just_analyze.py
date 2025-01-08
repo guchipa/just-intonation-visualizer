@@ -1,10 +1,12 @@
-import librosa
+# import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-import json
+
+# import json
 
 import calc_justfreq
-import sol_path
+
+# import sol_path
 
 
 # スペクトルを評価
@@ -16,6 +18,7 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
 
     # 前処理
     # 複数セグメントある場合に足し合わせる
+    print("ここまでおｋ")
     if len(t) > 1:
         spec = np.sum(spec, axis=1)
 
@@ -70,28 +73,28 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
 
 
 # ファイル入力での解析
-def analyze(file_path, pitch_list, show=False):
-    # 定数の読み込み
-    with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
-        constants = json.load(f)
-        sr = constants["sample_rate"]
+# def analyze(file_path, pitch_list, show=False):
+#     # 定数の読み込み
+#     with open(sol_path.resolve("config/constants.json"), "r", encoding="utf-8") as f:
+#         constants = json.load(f)
+#         sr = constants["sample_rate"]
 
-    y, sr = librosa.load(file_path, sr=sr)
-    spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
-
-    print(eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list))
-
-    if show is True:
-        plt.show()
-        print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")
-
-
-# データを受け取って解析
-# def analyze(y, sr, pitch_list, show=False):
+#     y, sr = librosa.load(file_path, sr=sr)
 #     spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
 
-#     return eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list)
+#     print(eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list))
 
 #     if show is True:
 #         plt.show()
 #         print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")
+
+
+# データを受け取って解析
+def analyze(y, sr, pitch_list, show=False):
+    spec, freq, t, im = plt.specgram(y, Fs=sr, NFFT=65536)
+
+    return eval(spec=spec, freq=freq, t=t, pitch_name_list=pitch_list)
+
+    if show is True:
+        plt.show()
+        print(f"spec = {spec}\nfreq = {freq}\nt = {t}\nim = {im}")
