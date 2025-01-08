@@ -26,7 +26,7 @@ def main():
 
         # メインウィンドウの作成
         root = tk.Tk()
-        title_text = "純正律 判定"
+        title_text = "Just in Tone"
         root.title(title_text)
 
         # バイナリデータをアイコンとして設定
