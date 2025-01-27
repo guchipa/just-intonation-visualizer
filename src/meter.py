@@ -48,7 +48,8 @@ def create_meter_window(pitch_name):
         if position is None:
             return
 
-        angle = 30 + (120 * (position + 1) / 2)
+        # 針の角度を計算
+        angle = 90 - (position * 60)  # -1 から 1 の範囲を -60 から 60 度に変換
         radians = math.radians(angle)
         x = 150 + 120 * math.cos(radians)
         y = 190 - 120 * math.sin(radians)

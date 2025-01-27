@@ -7,7 +7,7 @@ import calc_justfreq
 # import sol_path
 
 
-# スペクトルを評価
+# 演奏された音の評価
 def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
     # FFT に対する評価
     # spec: 各周波数に対するスペクトル（強さ）
@@ -53,18 +53,23 @@ def eval(spec, freq, t, pitch_name_list, EVAL_RANGE=50):
             target_idx + int((max_freq - target_freq) / (freq[1] - freq[0])) + 1,
         )
 
-        center = (eval_range_max - eval_range_min) // 2
+        center = (eval_range_max - eval_range_min) // 2 
         eval_spec = spec[eval_range_min:eval_range_max]
+        print(np.squeeze(eval_spec))
 
         # np.argmax で最も強いスペクトルをもつもののindex を取得
         spec_max = np.argmax(eval_spec)
 
         # spec_max が閾値以下の場合は None を返す
-        if eval_spec[spec_max] < 1e-5:
+        if eval_spec[spec_max] < 1e-7:
             eval_list.append(None)
-
-        # (-1, 1) に丸めてリストに追加
-        eval_list.append(round((spec_max - center) / center, 2))
+        else:
+            # spec_max が center と等しい場合は 0 を返す
+            if spec_max == center:
+                eval_list.append(0)
+            else:
+                # (-1, 1) に丸めてリストに追加
+                eval_list.append(round((spec_max - center) / center, 2))
 
     return eval_list
 
