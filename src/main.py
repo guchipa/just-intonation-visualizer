@@ -26,7 +26,7 @@ def main():
 
         # メインウィンドウの作成
         root = tk.Tk()
-        title_text = "Just in Tone"
+        title_text = "和音チューナー"
         root.title(title_text)
 
         # バイナリデータをアイコンとして設定

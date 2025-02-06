@@ -133,7 +133,7 @@ def build(parent, update_message_window):
     frame_buffer_size = ttk.Frame(parent)
     frame_buffer_size.pack(side=tk.TOP, padx=30, pady=10)
 
-    label_buffer_size = tk.Label(frame_buffer_size, text="バッファサイズ")
+    label_buffer_size = tk.Label(frame_buffer_size, text="FFTデータサイズ")
     label_buffer_size.pack(side=tk.LEFT, fill=tk.X)
 
     buffer_size = tk.StringVar()
