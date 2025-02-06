@@ -5,3 +5,4 @@ config
 build
 dist
 .vscode
+src/logs/app.log

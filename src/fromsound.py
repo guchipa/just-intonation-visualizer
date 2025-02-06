@@ -2,6 +2,7 @@ from tkinter import ttk
 import sounddevice as sd
 import numpy as np
 import json
+import logging
 
 import input_pitchname
 import just_analyze
@@ -15,6 +16,16 @@ update_gauges = []
 stream = None
 _pitch_list = []
 print_message = None
+
+# ロガーの取得
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(
+    filename=sol_path.resolve("logs/app.log"),
+    level=logging.INFO,
+    format="%(asctime)s, %(message)s",
+    encoding="utf-8",
+)
 
 
 # 音声入力ストリームの起動
@@ -30,6 +41,8 @@ def start_audio_stream():
 
     print("Audio stream started")
     print_message("リアルタイム解析を開始しました。")
+    logger.info("Audio stream started")
+    logger.info(f"name_list: {_pitch_list}")
 
     # 音声入力のコールバック関数
     def audio_callback(indata, frames, time, status):
@@ -44,6 +57,7 @@ def start_audio_stream():
         # 音声入力を解析
         try:
             evallist = just_analyze.analyze(samples, SAMPLE_RATE, _pitch_list)
+            logger.info(f"Evaluated deviation: {evallist}")
 
             # 各メーターを更新
             for i, deviation in enumerate(evallist):
@@ -53,6 +67,7 @@ def start_audio_stream():
         except Exception as e:
             print(f"Error analyzing pitch: {e}")
             print_message(f"Error : {e}")
+            logger.error(f"Error analyzing pitch: {e}")
             stop_audio_stream()
 
     # 音声入力ストリームの作成
